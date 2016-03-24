@@ -62,17 +62,21 @@ def results_of(state, poll):
         results.append(temp)
     return results
 
-def allResults():
+def get_all_results():
     all = {}
     for poll in KNOWN_POLLS:
-        all[poll] = results_of("NY",poll)
+        print "Getting data for %s" % (poll)
+        all[poll] = {}
+        for state in STATES:
+            print "    Getting data for %s" % (state)
+            all[poll][state] = results_of(state, poll)
     return all
 
 def main():
     #charts = get_data("polls.json?topic=2016-president-gop-primary")
     #print charts[0]
     #print results_of("NY","2016-president-gop-primary")
-    print allResults()
+    print get_all_results()
 
 if __name__ == "__main__":
     main()
