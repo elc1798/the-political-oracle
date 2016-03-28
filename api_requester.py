@@ -75,8 +75,8 @@ def get_all_results():
 def main():
     #charts = get_data("polls.json?topic=2016-president-gop-primary")
     #print charts[0]
-    #print results_of("NY","2016-president-gop-primary")
-    print get_all_results()
+    print results_of("NY","2016-president-gop-primary")
+    # print get_all_results()
 
 if __name__ == "__main__":
     main()
