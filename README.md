@@ -1,5 +1,7 @@
 # The Political Oracle
 
+### Ethan Cheng & Johnny So
+
 We've decided to use the Huffington Post
 [Pollster](http://elections.huffingtonpost.com/pollster/api) API for data on
 political poll.
