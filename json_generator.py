@@ -7,7 +7,7 @@ def add_state(state):
     global poll_results
     global candidates
     for poll in areq.KNOWN_POLLS:
-        if "president" not in poll or "primary" not in poll:
+        if "2016" not in poll or "president" not in poll or "primary" not in poll:
             continue
         try:
             res = areq.results_of(state, poll)[0]
@@ -30,7 +30,7 @@ def add_all_states():
 add_all_states()
 print poll_results
 
-f = open("poll_data.json", 'w')
+f = open("data/poll_data.json", 'w')
 f.write(str(poll_results))
 f.close()
 
