@@ -1,5 +1,5 @@
 .axis {
-    font: 10px sans-serif;
+    font: 12px arial;
 }
 
 .axis path, .axis line {
@@ -9,10 +9,10 @@
 }
 
 .arc text {
-  font: 10px sans-serif;
-  text-anchor: middle;
+    font: 12px arial;
+    text-anchor: middle;
 }
 
 .arc path {
-  stroke: #fff;
+    stroke: #fff;
 }

@@ -19,7 +19,6 @@ var barData = {'Perry': 17, 'Roemer': 2, 'Christie': 69, 'Carson': 277,
 	       'Graham': 0};
 var names = d3.keys(barData);
 var votes = names.map(function(key){ return barData[key];});
-console.log(votes);
 
 var candidateBreakDown = {
     "Bachmann" : {'IA': 6},
@@ -70,7 +69,6 @@ var candidateBreakDown = {
     "Will not vote" : {'CA': 2}
 };
 
-
 // Bar Graph
 
 // The initial variable setup
@@ -79,13 +77,15 @@ var margin_bottom = 50;
 var margin_right = 50;
 var margin_left = 50;
 
-var bar_width = 1350 - margin_left - margin_right;
+var bar_width = 1300 - margin_left - margin_right;
 var bar_height = 500 - margin_top - margin_bottom;
 
+// Ordinal for discrete (candidate names) domain
 var x = d3.scale.ordinal()
     .rangeRoundBands([0,bar_width],.05)
     .domain(names);
 
+// Linear because...votes are tallied in numbers
 var y = d3.scale.linear()
     .domain([0,d3.max(votes)])
     .range([bar_height,0]);
@@ -137,32 +137,44 @@ svg.selectAll("bar")
     .attr("width", x.rangeBand())
     .attr("y", function(d) { return y(barData[d]); })
     .attr("height", function(d) { return (bar_height - y(barData[d])); })
-    .on("click", function(d){ drawPieChart(d); });
+    .on("click", function(d){ drawPieChart(d,svg2); });
+
+// Insert header
+d3.select("body").append("h3");
 
 // Pie Chart
 
-function drawPieChart(guy){
+var pie_width = 960;
+var pie_height = 500;
+var radius = Math.min(pie_width, pie_height) / 2;
+var color = d3.scale.ordinal()
+    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00", "#A344E0",
+	   "#144CF6"]);
+var arc = d3.svg.arc()
+    .outerRadius(radius - 15)
+    .innerRadius(0);
+var labelArc = d3.svg.arc()
+    .outerRadius(radius - 50)
+    .innerRadius(radius - 50);
+// Creates the SVG coordinate space
+var svg2 = d3.select("body").append("svg")
+    .attr("width", pie_width)
+    .attr("height", pie_height)
+    .append("g")
+    .attr("transform", "translate(" + pie_width / 2 + "," + pie_height / 2 + ")");
+
+var candidateName = d3.select("h3")
+    .attr("align", "center");
+
+function drawPieChart(guy,svg2){
+    // Clear the SVG2 canvas for the Pie Chart of anything that was previously on it
+    svg2.selectAll("*").remove();
+    
+    // Change some text
+    candidateName.text(guy + " : Total Votes " + barData[guy]);
     var states = d3.keys(candidateBreakDown[guy]);
     var stateVotes = states.map(function(key){ return candidateBreakDown[guy][key];});        
-      
-    var pie_width = 960;
-    var pie_height = 500;
-    var radius = Math.min(pie_width, pie_height) / 2;
-    var color = d3.scale.ordinal()
-	.range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-    var arc = d3.svg.arc()
-	.outerRadius(radius - 15)
-	.innerRadius(0);
-    var labelArc = d3.svg.arc()
-	.outerRadius(radius - 30)
-	.innerRadius(radius - 30);
-    // Creates the SVG coordinate namespace
-    var svg2 = d3.select("body").append("svg")
-	.attr("width", pie_width)
-	.attr("height", pie_height)
-	.append("g")
-	.attr("transform", "translate(" + pie_width / 2 + "," + pie_height / 2 + ")");
-
+        
     var pie = d3.layout.pie()
 	.sort(null) // disables sorting
 	.value(function(d) { return candidateBreakDown[guy][d]; });
@@ -179,6 +191,6 @@ function drawPieChart(guy){
     g.append("text")
 	.attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
 	.attr("dy", ".35em")
-	.text(function(d) { return d.data; });
+	.text(function(d) { return d.data /*+ " : " + d.value*/; });
 }
 
