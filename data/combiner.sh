@@ -1,3 +1,4 @@
-echo "{" > combined.json
-command ls *.json | sed -e 's/\..*$//' | while read line; do echo "\"$line\" : `cat $line.json`," >> combined.json; done
-echo "}" >> combined.json
+echo "{" > combined
+command ls *.json | sed -e 's/\..*$//' | while read line; do echo "\"$line\" : `cat $line.json`," >> combined; done
+echo "}" >> combined
+mv combined combined.json
