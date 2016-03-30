@@ -73,12 +73,12 @@ var candidateBreakDown = {
 
 // The initial variable setup
 var margin_top = 50;
-var margin_bottom = 50;
+var margin_bottom = 200;
 var margin_right = 50;
 var margin_left = 50;
 
 var bar_width = 1300 - margin_left - margin_right;
-var bar_height = 500 - margin_top - margin_bottom;
+var bar_height = 700 - margin_top - margin_bottom;
 
 // Ordinal for discrete (candidate names) domain
 var x = d3.scale.ordinal()
