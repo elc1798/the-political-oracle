@@ -46,8 +46,7 @@ var xAxis = d3.svg.axis()
 
 var yAxis = d3.svg.axis()
     .scale(y)
-    .orient("left")
-    .ticks(10);
+    .orient("left");
 
 var svg = d3.select("body").append("svg")
     .attr("width", margin_left + bar_width + margin_right)
@@ -55,34 +54,34 @@ var svg = d3.select("body").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin_left + "," + margin_top + ")");
 
-  svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + bar_height + ")")
-      .call(xAxis)
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + bar_height + ")")
+    .call(xAxis)
     .selectAll("text")
-      .style("text-anchor", "end")
-      .attr("dx", "-.8em")
-      .attr("dy", "-.55em")
-      .attr("transform", "rotate(-90)" );
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", "-.55em")
+    .attr("transform", "rotate(-90)" );
 
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
+svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
     .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Votes");
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("Votes");
 
-  svg.selectAll("bar")
-      .data(names)
+svg.selectAll("bar")
+    .data(names)
     .enter().append("rect")
-      .style("fill", "steelblue")
-      .attr("x", function(d) { return x(d); })
-      .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(barData[d]); })
-      .attr("height", function(d) { return (bar_height - y(barData[d])); });
+    .style("fill", "steelblue")
+    .attr("x", function(d) { return x(d); })
+    .attr("width", x.rangeBand())
+    .attr("y", function(d) { return y(barData[d]); })
+    .attr("height", function(d) { return (bar_height - y(barData[d])); });
 
 /*
 // Pie Chart
