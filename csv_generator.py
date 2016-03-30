@@ -21,16 +21,10 @@ def add_all_states():
     for state in areq.STATES:
         add_state(state)
 
-def write_to_csv():
-    csv = ""
-    for person in poll_results:
-        csv += ",".join((person, str(poll_results[person]))) + "\n"
-    print csv
-    f = open("poll_res.csv", 'w')
-    f.write(csv)
-    f.close
-
 add_all_states()
 print poll_results
-write_to_csv()
+
+f = open("poll_data.json", 'w')
+f.write(str(poll_results))
+f.close()
 
