@@ -1,9 +1,11 @@
 import api_requester as areq
 
 poll_results = {}
+candidates = {}
 
 def add_state(state):
     global poll_results
+    global candidates
     for poll in areq.KNOWN_POLLS:
         if "president" not in poll or "primary" not in poll:
             continue
@@ -16,6 +18,10 @@ def add_state(state):
                 poll_results[candidate] = int(res[candidate])
             else:
                 poll_results[candidate] += int(res[candidate])
+            if candidate not in candidates:
+                candidates[candidate] = { state : int(res[candidate]) }
+            else:
+                candidates[candidate][state] = int(res[candidate])
 
 def add_all_states():
     for state in areq.STATES:
@@ -27,4 +33,9 @@ print poll_results
 f = open("poll_data.json", 'w')
 f.write(str(poll_results))
 f.close()
+
+for candidate in candidates:
+    f = open(candidate.lower().replace(" ", "_").replace("/", "_") + ".json", 'w')
+    f.write(str(candidates[candidate]))
+    f.close()
 
