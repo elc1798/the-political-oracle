@@ -19,6 +19,7 @@ var barData = {'Perry': 17, 'Roemer': 2, 'Christie': 69, 'Carson': 277,
 	       'Graham': 0};
 var names = d3.keys(barData);
 var votes = names.map(function(key){ return barData[key];});
+console.log(votes);
 
 var candidateBreakDown = {
     "Bachmann" : {'IA': 6},
@@ -132,44 +133,40 @@ svg.selectAll("bar")
     .data(names)
     .enter().append("rect")
     .style("fill", "steelblue")
-    .attr("x", function(d) { console.log(d); return x(d); })
+    .attr("x", function(d) { return x(d); })
     .attr("width", x.rangeBand())
     .attr("y", function(d) { return y(barData[d]); })
-    .attr("height", function(d) { return (bar_height - y(barData[d])); });
-    //.onClick(function(d){ drawPieChart(d)});
+    .attr("height", function(d) { return (bar_height - y(barData[d])); })
+    .on("click", function(d){ drawPieChart(d); });
 
 // Pie Chart
-function drawPieChart(guy){
-    console.log("drawpiechart");
-    var states = d3.keys(candidateBreakDown[guy]);
-    var stateVotes = states.map(function(key){ return candidateBreakDown[guy][key];});
 
+function drawPieChart(guy){
+    var states = d3.keys(candidateBreakDown[guy]);
+    var stateVotes = states.map(function(key){ return candidateBreakDown[guy][key];});        
+      
     var pie_width = 960;
     var pie_height = 500;
     var radius = Math.min(pie_width, pie_height) / 2;
-    
     var color = d3.scale.ordinal()
 	.range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-    
     var arc = d3.svg.arc()
 	.outerRadius(radius - 15)
 	.innerRadius(0);
-
     var labelArc = d3.svg.arc()
 	.outerRadius(radius - 30)
 	.innerRadius(radius - 30);
-    
-    var pie = d3.layout.pie()
-	.sort(null) // disables sorting
-	.value(function(d) { return stateVotes[d]; });
-    
     // Creates the SVG coordinate namespace
     var svg2 = d3.select("body").append("svg")
 	.attr("width", pie_width)
 	.attr("height", pie_height)
 	.append("g")
 	.attr("transform", "translate(" + pie_width / 2 + "," + pie_height / 2 + ")");
-    
+
+    var pie = d3.layout.pie()
+	.sort(null) // disables sorting
+	.value(function(d) { return candidateBreakDown[guy][d]; });
+        
     var g = svg2.selectAll(".arc")
 	.data(pie(states))
 	.enter().append("g")
@@ -177,36 +174,11 @@ function drawPieChart(guy){
     
     g.append("path")
 	.attr("d",arc)
-	.style("fill", function(d) { return color(d); });
+	.style("fill", function(d) { return color(d.data); });
     
     g.append("text")
 	.attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
 	.attr("dy", ".35em")
-	.text(function(d) { return d; });
+	.text(function(d) { return d.data; });
 }
 
-
-/*
-d3.csv("data.csv", type, function(error, data) {
-  if (error) throw error;
-
-  var g = svg.selectAll(".arc")
-      .data(pie(data))
-    .enter().append("g")
-      .attr("class", "arc");
-
-  g.append("path")
-      .attr("d", arc)
-      .style("fill", function(d) { return color(d.data.age); });
-
-  g.append("text")
-      .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
-      .attr("dy", ".35em")
-      .text(function(d) { return d.data.age; });
-});
-
-function type(d) {
-  d.population = +d.population;
-  return d;
-}
-*/
